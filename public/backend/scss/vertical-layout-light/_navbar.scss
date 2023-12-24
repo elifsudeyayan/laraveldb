@@ -29,7 +29,7 @@
       font-size: 1.5rem;
       margin-right: 0;
       padding: .25rem 0;
-      
+
       &.brand-logo-mini {
         display: none;
       }
@@ -116,7 +116,7 @@
         }
         .nav-link {
           color: inherit;
-          font-size: $navbar-font-size; 
+          font-size: $navbar-font-size;
         }
         &.nav-search {
           margin-left: 2rem;
@@ -173,17 +173,17 @@
                 display: none;
               }
             }
-          }  
+          }
         }
         &.dropdown {
           .dropdown-menu {
-            @extend .dropdownAnimation;        
+            @extend .dropdownAnimation;
             border: none;
             -webkit-box-shadow: 0px 3px 21px 0px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 3px 21px 0px rgba(0, 0, 0, 0.2);
           }
           .navbar-dropdown {
-            position: absolute;            
+            position: absolute;
             font-size: 0.9rem;
             margin-top: 0;
             right: 0;
@@ -310,7 +310,7 @@
                     color: $white;
                   }
                 }
-                .input-group-text { 
+                .input-group-text {
                   i {
                     color: $white;
                   }

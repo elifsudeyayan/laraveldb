@@ -43,7 +43,7 @@ class AjaxController extends Controller
 
            'name'=> Str::title($request->name),
            'email' => $request->name,
-           'sucject'=> $request->sucject,
+           'subject'=> $request->subject,
            'message' =>$request->message,
            'ip' => request()->ip(),
 
@@ -54,5 +54,10 @@ class AjaxController extends Controller
 
         $sonkaydedilen = Contact::create($newdata);
           return  back()->with(['message'=>'Başarıyla Gönderildi']);
+    }
+
+    public function logout(){
+        Auth::logout();
+        return  redirect()->route('anasayfa');
     }
 }

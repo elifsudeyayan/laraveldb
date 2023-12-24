@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
-            $table->string('sucject')->nullable();
+            $table->string('subject')->nullable();
             $table->text('message')->nullable();
             $table->string('ip')->nullable();
             $table->enum('status',['0','1'])->nullable();

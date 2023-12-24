@@ -14,30 +14,33 @@ class PageController extends Controller
     public function urunler(Request $request, $slug=null) {
         $category = request()->segment(1) ?? null;
 
-        $size = $request->size ?? null;
+        $sizes =  !empty($request->size) ? explode(',',$request->size) : null;
 
-        $color = $request->color ?? null;
+        $colors = !empty($request->color) ? explode(',',$request->color) : null;
 
-        $startprice = $request->start_price ?? null;
+        $startprice = $request->min ?? null;
 
-        $endprice = $request->end_price ?? null;
+        $endprice = $request->max ?? null;
 
          $order = $request->order ?? 'id';
-         $short = $request->short ?? 'desc';
+         $sort = $request->sort ?? 'desc';
 
 
        $products =Product::where('status','1')->select(['id','name','slug','size','color','price','category_id','image'])
-        ->where(function($q) use($size,$color,$startprice,$endprice) {
-            if(!empty($size)) {
-                $q->where('size','$size');
+        ->where(function($q) use($sizes,$colors,$startprice,$endprice) {
+            if(!empty($sizes)) {
+                $q->whereIn('size','$sizes');
             }
 
-            if(!empty($color)) {
-                $q->where('color','$color');
+            if(!empty($colors)) {
+                $q->whereIn('color','$colors');
             }
 
             if(!empty($startprice) && $endprice) {
-                $q->whereBetween('price', ['$startprice,$endprice']);
+               // $q->whereBetween('price', ['$startprice,$endprice']);
+
+               $q->where('price' , '>=' , $startprice);
+               $q->where('price' , '<=' , $endprice);
             }
             return $q;
 
@@ -49,18 +52,24 @@ class PageController extends Controller
        }
        return $q;
 
-       });
+       })->orderBy($order,$sort)->paginate(21);
 
-       $minprice = $products->min('price');
-       $maxprice = $products->max('price');
+//üsteklliler  yani $product diye yazan yerler buraya kadar ki yer veri tabananına bilgi yolluyor verileri çekmek için  sonraki adım ajaxla geri döndürüyoruz aşağıdaki gbi
+           if($request->ajax()) {
+            $view =view('frontend.ajax.productList' ,compact('products'))->render();
+            return response(['data'=>$view, 'paginate'=>(string) $product->withQueryString()->links('vendor.pagination.custom')]);
+           }
+
 
        $sizelists = Product::where('status','1')->groupBy('size')->pluck('size')->toArray();
        $colors = Product::where('status','1')->groupBy('color')->pluck('color')->toArray();
 
-        $products = $products->orderBy($order,$short)->paginate(20);
+
+
+        $maxprice = Product::max('price');
 
         #$categories = Category::where('status','1')->where('cat_ust',null)->withCount('items')->get();
-        return view('frontend.pages.products', compact('products','minprice','maxprice','sizelists','colors'));
+        return view('frontend.pages.products', compact('products','maxprice','sizelists','colors'));
     }
     public function indirimdekiurunler() {
         return view('frontend.pages.products');
@@ -83,9 +92,7 @@ class PageController extends Controller
          $about = About::where('id',1)->first();
         return view('frontend.pages.about',compact('about'));
     }
-    public function cart() {
-        return view('frontend.pages.cart');
-    }
+
 
     public function iletisim() {
         return view('frontend.pages.contact');

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PageHomeController;
 ;use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomAuthController;
+use Illuminate\Support\Facades\Auth;
 
 Route::group(['middleware' =>'sitesetting'], function() {
 
@@ -23,7 +26,16 @@ Route::get('/urun/{slug}' , [PageController::class, 'urundetay'] )->name('urunde
 Route::get('/hakkimizda' , [PageController::class, 'hakkimizda'] )->name('hakkimizda');
 Route::get('/iletisim' , [PageController::class, 'iletisim'] )->name('iletisim');
 Route::post('/iletisim/kaydet' , [AjaxController::class, 'iletisimkaydet'] )->name('iletisim.kaydet');
-Route::get('/sepet' , [PageController::class, 'cart'] )->name('sepet');
+
+Route::get('/sepet' , [CartController::class, 'index'] )->name('sepet');
+Route::post('/sepet/ekle' , [CartController::class, 'add'] )->name('sepet.add');
+Route::post('/sepet/remove' , [CartController::class, 'remove'] )->name('sepet.remove');
+Route::post('/sepet/coouponcheck' , [CartController::class, 'coouponcheck'] )->name('cooupon.check');
+
+Auth::routes();
+
+
+Route::get('/cikis' , [AjaxController::class, 'logout'])->name('cikis');
 
 });
 
@@ -33,3 +45,6 @@ Route::get('/sepet' , [PageController::class, 'cart'] )->name('sepet');
 //tanımladğımız route yapısı yine bu yerde
 //->name('anasayfa'): Bu, routa bir isim verir. Bu ismi daha sonra URL'leri oluştururken veya linkler oluştururken kullanabilirsiniz. Örneğin, route('anasayfa') kullanarak bu route'a yönlendiren bir link oluşturabilirsiniz. yani sol en altta çıkan  isim
 //örneğin index.blade.php yani anasayfadaki iletişim ürünler hakkımızdaki vs kısmının ynaına belirdeiğimiz routlar burdan oluyour istek alınıyor
+
+
+#Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
- use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+ //use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\CategorySeeder;
-use Database\Seeders\ProductSeeder;
+#use Database\Seeders\ProductSeeder;
+use Database\Factories\ProductFactory;
+use App\Models\Product;
 
 
 
@@ -23,6 +25,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+
+
         $this->call([
           SliderSeeder::class,
           CategorySeeder::class,
@@ -32,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-
+      Product::factory(100)->create();
 
     }
 }

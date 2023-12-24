@@ -8,6 +8,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Seeder\CategorySeeder;
 
 
+
+
 class Category extends Model
 {
     use Sluggable;
@@ -37,10 +39,25 @@ public function items() {
 
     }
 
-#public function subcategory() {
-   # return $this->hasMany(Category::class, 'category_ust','id');
+public function subCategory() {
+   return $this->hasMany(Category::class, 'cat_ust','id');
+}
 
-#}
+   public function category() {
+    return $this->hasOne(Category::class, 'id','cat_ust');
+
+}
+
+public function getTotalProductCount()
+{
+    $total = $this->items()->count();
+
+    foreach ($this->subcategory as $childCategory) {
+        $total += $childCategory->items()->count();
+    }
+
+    return $total;
+}
 
 
 

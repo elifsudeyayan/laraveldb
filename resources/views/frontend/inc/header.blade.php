@@ -22,9 +22,9 @@
                 <li><a href="#"><span class="icon icon-person"></span></a></li>
                 <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                 <li>
-                  <a href={{route('sepet')}} class="Sepete Ekle">
+                  <a href={{route('sepet')}} class="site-cart">
                     <span class="icon icon-shopping_cart"></span>
-                    <span class="count">2</span>
+                    <span class="count">{{session()->get('cart') ? count(session('cart')) : 0}}</span>
                   </a>
                 </li>
                 <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -44,19 +44,18 @@
             <ul class="dropdown">
 
                 @if (!empty($categories) && $categories->count() > 0)
-                @foreach ($categories as $category)
-                @if ($category->cat_ust == null)
+                @foreach ($categories->where('cat_ust',null) as  $category)
                 <li class="has-children">
                     <a href="{{route($category->slug.'urunler')}}">{{$category->name}}</a>
                     <ul class="drapdown">
-                        @foreach ( $categories as $subCategory )
-                         @if($subCategory->cat_ust == $category->id)
+                        @foreach ( $category->subcategory as $subCategory)
+
                             <li> <a href="{{route($category->slug.'urunler',$subCategory->slug)}}"> {{$subCategory->name}}</a></li>
-                         @endif
+
                     @endforeach
                 </ul>
             </li>
-         @endif
+
             @endforeach
             @endif
 
